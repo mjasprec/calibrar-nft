@@ -29,17 +29,21 @@ export class UsersService {
       role,
     } = registerDto;
 
-    const newUser = {
-      name,
-      email,
-      username,
-      password,
-      gender,
-      birthday,
-      wallet,
-      about,
-      role,
-    };
+    console.log('RegisterUser birthday', birthday);
+
+    const newUser = await this.prisma.user.create({
+      data: {
+        name,
+        email,
+        username,
+        password,
+        gender,
+        birthday,
+        wallet,
+        about,
+        role,
+      },
+    });
 
     return newUser;
   }

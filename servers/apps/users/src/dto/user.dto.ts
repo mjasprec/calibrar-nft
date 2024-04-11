@@ -1,5 +1,23 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType, Field, registerEnumType } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+
+export enum Genders {
+  male = 'male',
+  female = 'female',
+}
+
+export enum Roles {
+  Admin = 'Admin',
+  User = 'User',
+}
+
+registerEnumType(Genders, {
+  name: 'Genders',
+});
+
+registerEnumType(Roles, {
+  name: 'Roles',
+});
 
 @InputType()
 export class RegisterDto {
@@ -25,8 +43,8 @@ export class RegisterDto {
   @MinLength(6, { message: 'Password must be at least 6 characters' })
   password: string;
 
-  @Field(() => String, { defaultValue: 'male' })
-  gender: string;
+  @Field(() => Genders, { defaultValue: 'male' })
+  gender: Genders;
 
   @Field()
   @IsNotEmpty({ message: 'Birthday is required.' })
@@ -38,8 +56,8 @@ export class RegisterDto {
   @Field()
   about: string;
 
-  @Field(() => String, { defaultValue: 'User', nullable: true })
-  role?: string;
+  @Field(() => Roles, { defaultValue: 'User', nullable: true })
+  role?: Roles;
 }
 
 @InputType()
