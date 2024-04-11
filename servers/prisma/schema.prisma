@@ -23,6 +23,13 @@ enum Gender {
   female
 }
 
+enum NftCategory {
+  basketball
+  boxing
+  mma
+  hockey
+}
+
 model Avatar {
   id  String @id @default(auto()) @map("_id") @db.ObjectId
   userId  String @unique @db.ObjectId
@@ -59,4 +66,5 @@ model Nft {
   price Float
   userId  String @unique @db.ObjectId
   user User @relation(fields: [userId], references: [id])
+  category NftCategory
 }

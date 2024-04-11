@@ -1,5 +1,16 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType, Field, registerEnumType } from '@nestjs/graphql';
 import { IsNotEmpty, IsString } from 'class-validator';
+
+export enum NftCategory {
+  basketball = 'basketball',
+  boxing = 'boxing',
+  mma = 'mma',
+  hockey = 'hockey',
+}
+
+registerEnumType(NftCategory, {
+  name: 'NftCategory',
+});
 
 @InputType()
 export class NftDto {
@@ -22,4 +33,7 @@ export class NftDto {
   @Field()
   @IsNotEmpty({ message: 'Wallet amount is required.' })
   price: number;
+
+  @Field(() => NftCategory)
+  category: NftCategory;
 }

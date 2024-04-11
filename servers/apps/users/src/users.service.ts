@@ -31,59 +31,79 @@ export class UsersService {
       role,
     } = registerDto;
 
-    console.log('RegisterUser birthday', birthday);
+    try {
+      console.log('RegisterUser birthday', birthday);
 
-    const newUser = await this.prisma.user.create({
-      data: {
-        firstName,
-        lastName,
-        email,
-        username,
-        password,
-        gender,
-        birthday,
-        wallet,
-        about,
-        role,
-      },
-    });
+      const newUser = await this.prisma.user.create({
+        data: {
+          firstName,
+          lastName,
+          email,
+          username,
+          password,
+          gender,
+          birthday,
+          wallet,
+          about,
+          role,
+        },
+      });
 
-    return newUser;
+      return newUser;
+    } catch (error) {
+      console.log('PRISMA RegisterUser ERROR', error);
+      throw new BadRequestException(error);
+    }
   }
 
   async LoginUser(loginDto: LoginDto) {
-    const { username, password } = loginDto;
+    try {
+      const { username, password } = loginDto;
 
-    const existingUser = { username, password };
+      const existingUser = { username, password };
 
-    return existingUser;
+      return existingUser;
+    } catch (error) {
+      console.log('PRISMA LoginUser ERROR', error);
+      throw new BadRequestException(error);
+    }
   }
 
   async GetUsers() {
-    const users = this.prisma.user.findMany({});
+    try {
+      const users = this.prisma.user.findMany({});
 
-    return users;
+      return users;
+    } catch (error) {
+      console.log('PRISMA GetUsers ERROR', error);
+      throw new BadRequestException(error);
+    }
   }
 
   // NFT
   async CreateNft(nftDto: NftDto) {
-    const { userId, name, description, imgUrl, price } = nftDto;
+    const { userId, name, description, imgUrl, price, category } = nftDto;
 
     try {
       const newNft = await this.prisma.nft.create({
-        data: { userId, name, description, imgUrl, price },
+        data: { userId, name, description, imgUrl, price, category },
       });
 
       return newNft;
     } catch (error) {
-      console.log('PRISMA ERROR', error);
+      console.log('PRISMA CreateNft ERROR', error);
       throw new BadRequestException(error);
     }
   }
 
   async GetAllNft() {
-    const nfts = this.prisma.nft.findMany({});
+    try {
+      const nfts = this.prisma.nft.findMany({});
 
-    return nfts;
+      return nfts;
+    } catch (error) {
+      console.log('PRISMA GetAllNft ERROR', error);
+      throw new BadRequestException(error);
+    }
   }
 }

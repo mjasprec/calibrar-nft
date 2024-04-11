@@ -20,4 +20,7 @@ export class Nft {
 
   @Field()
   price: number;
+
+  @Field()
+  category: string;
 }
