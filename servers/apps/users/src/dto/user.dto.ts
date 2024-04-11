@@ -22,9 +22,14 @@ registerEnumType(Roles, {
 @InputType()
 export class RegisterDto {
   @Field()
-  @IsNotEmpty({ message: 'Name is required.' })
-  @IsString({ message: 'Name must be a string.' })
-  name: string;
+  @IsNotEmpty({ message: 'First name is required.' })
+  @IsString({ message: 'First name must be a string.' })
+  firstName: string;
+
+  @Field()
+  @IsNotEmpty({ message: 'Last name is required.' })
+  @IsString({ message: 'Last name must be a string.' })
+  lastName: string;
 
   @Field()
   @IsNotEmpty({ message: 'Email is required.' })

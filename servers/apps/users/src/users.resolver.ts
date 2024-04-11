@@ -19,7 +19,8 @@ export class UsersResolver {
     // @Context() context: { res: Response },
   ): Promise<RegisterResponse> {
     if (
-      !registerDto.name ||
+      !registerDto.firstName ||
+      !registerDto.lastName ||
       !registerDto.email ||
       !registerDto.password ||
       !registerDto.username
