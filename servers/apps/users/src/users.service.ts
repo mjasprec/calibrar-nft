@@ -113,11 +113,13 @@ export class UsersService {
     try {
       const { userId, nftId, commentText } = commentDto;
 
-      const nftComment = {
-        userId,
-        nftId,
-        commentText,
-      };
+      const nftComment = await this.prisma.comment.create({
+        data: {
+          userId,
+          nftId,
+          commentText,
+        },
+      });
 
       return nftComment;
     } catch (error) {

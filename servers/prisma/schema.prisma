@@ -67,4 +67,13 @@ model Nft {
   userId  String @unique @db.ObjectId
   user User @relation(fields: [userId], references: [id])
   category NftCategory
+  nftComment Comment[]
+}
+
+model Comment {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  commentText String
+  nftId String @db.ObjectId
+  nft Nft @relation(fields: [nftId], references: [id])
+  userId String @db.ObjectId
 }
