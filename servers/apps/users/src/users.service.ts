@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto, RegisterDto } from './dto/user.dto';
+import { PrismaService } from '../../../prisma/prisma.service';
 // import { Response } from 'express';
 
 @Injectable()
@@ -9,6 +10,7 @@ export class UsersService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly prisma: PrismaService,
   ) {}
 
   async RegisterUser(
@@ -51,7 +53,7 @@ export class UsersService {
   }
 
   async GetUsers() {
-    const users = [];
+    const users = this.prisma.user.findMany({});
 
     return users;
   }
