@@ -8,6 +8,8 @@ import { User } from './entities/user.entity';
 import { CreateNftResponse } from './types/nft.types';
 import { NftDto } from './dto/nft.dto';
 import { Nft } from './entities/nft.entity';
+import { CreateCommentResponse } from './types/comment.types';
+import { CommentDto } from './dto/comment.dto';
 
 @Resolver('User')
 export class UsersResolver {
@@ -61,5 +63,17 @@ export class UsersResolver {
   @Query(() => [Nft])
   async GetAllNft() {
     return this.userService.GetAllNft();
+  }
+
+  // NFT Comment
+  @Mutation(() => CreateCommentResponse)
+  async CreateNFTComment(@Args('commentDto') commentDto: CommentDto) {
+    if (!commentDto.commentText) {
+      throw new BadRequestException('Cannot leave empty comment');
+    }
+
+    const comment = await this.userService.CreateNFTComment(commentDto);
+
+    return { comment };
   }
 }

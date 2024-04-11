@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto, RegisterDto } from './dto/user.dto';
 import { NftDto } from './dto/nft.dto';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { CommentDto } from './dto/comment.dto';
 // import { Response } from 'express';
 
 @Injectable()
@@ -103,6 +104,24 @@ export class UsersService {
       return nfts;
     } catch (error) {
       console.log('PRISMA GetAllNft ERROR', error);
+      throw new BadRequestException(error);
+    }
+  }
+
+  // NFT Comment
+  async CreateNFTComment(commentDto: CommentDto) {
+    try {
+      const { userId, nftId, commentText } = commentDto;
+
+      const nftComment = {
+        userId,
+        nftId,
+        commentText,
+      };
+
+      return nftComment;
+    } catch (error) {
+      console.log('PRISMA CreateNFTComment ERROR', error);
       throw new BadRequestException(error);
     }
   }
