@@ -5,17 +5,13 @@ import { RegisterDto } from './dto/user.dto';
 // import { Response } from 'express';
 import { BadRequestException } from '@nestjs/common';
 import { User } from './entities/user.entity';
-// import { NftService } from '../../nft/src/nft.service';
 import { CreateNftResponse } from './types/nft.types';
 import { NftDto } from './dto/nft.dto';
 import { Nft } from './entities/nft.entity';
 
 @Resolver('User')
 export class UsersResolver {
-  constructor(
-    private readonly userService: UsersService,
-    // private readonly nftService: NftService,
-  ) {}
+  constructor(private readonly userService: UsersService) {}
 
   @Mutation(() => RegisterResponse)
   async RegisterUser(
@@ -41,6 +37,7 @@ export class UsersResolver {
     return this.userService.GetUsers();
   }
 
+  // NFT
   @Mutation(() => CreateNftResponse)
   async CreateNft(
     @Args('nftDto') nftDto: NftDto,

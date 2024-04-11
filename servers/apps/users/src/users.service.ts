@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto, RegisterDto } from './dto/user.dto';
 import { NftDto } from './dto/nft.dto';
 import { PrismaService } from '../../../prisma/prisma.service';
-
 // import { Response } from 'express';
 
 @Injectable()
@@ -76,11 +75,12 @@ export class UsersService {
       return newNft;
     } catch (error) {
       console.log('PRISMA ERROR', error);
+      throw new BadRequestException(error);
     }
   }
 
   async GetAllNft() {
-    const nfts = [];
+    const nfts = this.prisma.nft.findMany({});
 
     return nfts;
   }
