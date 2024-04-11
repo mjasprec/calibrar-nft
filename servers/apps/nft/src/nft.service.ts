@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { NftDto } from './dto/nft.dto';
+import { NftDto } from '../../users/src/dto/nft.dto';
 
 @Injectable()
 export class NftService {

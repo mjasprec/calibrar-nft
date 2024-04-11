@@ -2,7 +2,7 @@ import { ObjectType, Field } from '@nestjs/graphql';
 import { Nft } from '../entities/nft.entity';
 
 @ObjectType()
-export class ErrorType {
+export class NftErrorType {
   @Field()
   message: string;
 
@@ -15,6 +15,6 @@ export class CreateNftResponse {
   @Field(() => Nft, { nullable: true })
   nft?: Nft | any;
 
-  @Field(() => ErrorType, { nullable: true })
-  error?: ErrorType;
+  @Field(() => NftErrorType, { nullable: true })
+  error?: NftErrorType;
 }

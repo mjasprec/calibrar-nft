@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto, RegisterDto } from './dto/user.dto';
+import { NftDto } from './dto/nft.dto';
 import { PrismaService } from '../../../prisma/prisma.service';
+
 // import { Response } from 'express';
 
 @Injectable()
@@ -60,5 +62,26 @@ export class UsersService {
     const users = this.prisma.user.findMany({});
 
     return users;
+  }
+
+  // NFT
+  async CreateNft(nftDto: NftDto) {
+    const { userId, name, description, imgUrl, price } = nftDto;
+
+    try {
+      const newNft = await this.prisma.nft.create({
+        data: { userId, name, description, imgUrl, price },
+      });
+
+      return newNft;
+    } catch (error) {
+      console.log('PRISMA ERROR', error);
+    }
+  }
+
+  async GetAllNft() {
+    const nfts = [];
+
+    return nfts;
   }
 }

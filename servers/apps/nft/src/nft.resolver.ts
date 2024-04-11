@@ -1,10 +1,10 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { NftService } from './nft.service';
-import { CreateNftResponse } from './types/nft.types';
-import { NftDto } from './dto/nft.dto';
+import { CreateNftResponse } from '../../users/src/types/nft.types';
+import { NftDto } from '../../users/src/dto/nft.dto';
 // import { Response } from 'express';
 import { BadRequestException } from '@nestjs/common';
-import { Nft } from './entities/nft.entity';
+import { Nft } from '../../users/src/entities/nft.entity';
 
 @Resolver()
 export class NftResolver {

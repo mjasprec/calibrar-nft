@@ -1,5 +1,5 @@
 import { ObjectType, Field, Directive } from '@nestjs/graphql';
-import { Nft } from 'apps/nft/src/entities/nft.entity';
+import { Nft } from 'apps/users/src/entities/nft.entity';
 
 @ObjectType()
 @Directive('@key(fields: "id")')
