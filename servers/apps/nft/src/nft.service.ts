@@ -1,8 +1,27 @@
 import { Injectable } from '@nestjs/common';
+import { NftDto } from './dto/nft.dto';
 
 @Injectable()
 export class NftService {
-  getHello(): string {
-    return 'Hello World!';
+  constructor() {}
+
+  async CreateNft(nftDto: NftDto) {
+    const { userId, name, description, imgUrl, price } = nftDto;
+
+    const newNft = {
+      userId,
+      name,
+      description,
+      imgUrl,
+      price,
+    };
+
+    return newNft;
+  }
+
+  async GetAllNft() {
+    const nfts = [];
+
+    return nfts;
   }
 }
