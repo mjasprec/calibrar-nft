@@ -5,7 +5,7 @@ import { LoginDto, RegisterDto } from './dto/user.dto';
 import { NftDto } from './dto/nft.dto';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CommentDto } from './dto/comment.dto';
-// import { Response } from 'express';
+import { Response } from 'express';
 
 @Injectable()
 export class UsersService {
@@ -15,10 +15,7 @@ export class UsersService {
     private readonly prisma: PrismaService,
   ) {}
 
-  async RegisterUser(
-    registerDto: RegisterDto,
-    // response: Response
-  ) {
+  async RegisterUser(registerDto: RegisterDto, response: Response) {
     const {
       firstName,
       lastName,
@@ -33,9 +30,18 @@ export class UsersService {
     } = registerDto;
 
     try {
-      console.log('RegisterUser birthday', birthday);
+      const isExistingEmail = await this.prisma.user.findUnique({
+        where: { email },
+      });
 
-      const newUser = await this.prisma.user.create({
+      const isExistingUsername = await this.prisma.user.findUnique({
+        where: { username },
+      });
+
+      if (isExistingEmail || isExistingUsername) {
+        throw new BadRequestException('Username/Email already exists.');
+      }
+      const user = await this.prisma.user.create({
         data: {
           firstName,
           lastName,
@@ -50,10 +56,10 @@ export class UsersService {
         },
       });
 
-      return newUser;
+      return { user, response };
     } catch (error) {
-      console.log('PRISMA RegisterUser ERROR', error);
-      throw new BadRequestException(error);
+      console.log('PRISMA RegisterUser ERROR', error.message);
+      throw new BadRequestException(error.message);
     }
   }
 
@@ -65,8 +71,8 @@ export class UsersService {
 
       return existingUser;
     } catch (error) {
-      console.log('PRISMA LoginUser ERROR', error);
-      throw new BadRequestException(error);
+      console.log('PRISMA LoginUser ERROR', error.message);
+      throw new BadRequestException(error.message);
     }
   }
 
@@ -76,8 +82,8 @@ export class UsersService {
 
       return users;
     } catch (error) {
-      console.log('PRISMA GetUsers ERROR', error);
-      throw new BadRequestException(error);
+      console.log('PRISMA GetUsers ERROR', error.message);
+      throw new BadRequestException(error.message);
     }
   }
 
@@ -92,8 +98,8 @@ export class UsersService {
 
       return newNft;
     } catch (error) {
-      console.log('PRISMA CreateNft ERROR', error);
-      throw new BadRequestException(error);
+      console.log('PRISMA CreateNft ERROR', error.message);
+      throw new BadRequestException(error.message);
     }
   }
 
@@ -103,8 +109,8 @@ export class UsersService {
 
       return nfts;
     } catch (error) {
-      console.log('PRISMA GetAllNft ERROR', error);
-      throw new BadRequestException(error);
+      console.log('PRISMA GetAllNft ERROR', error.message);
+      throw new BadRequestException(error.message);
     }
   }
 
@@ -123,8 +129,8 @@ export class UsersService {
 
       return nftComment;
     } catch (error) {
-      console.log('PRISMA CreateNFTComment ERROR', error);
-      throw new BadRequestException(error);
+      console.log('PRISMA CreateNFTComment ERROR', error.message);
+      throw new BadRequestException(error.message);
     }
   }
 }

@@ -1,8 +1,8 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { RegisterResponse } from './types/user.types';
 import { RegisterDto } from './dto/user.dto';
-// import { Response } from 'express';
+import { Response } from 'express';
 import { BadRequestException } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { CreateNftResponse } from './types/nft.types';
@@ -18,7 +18,7 @@ export class UsersResolver {
   @Mutation(() => RegisterResponse)
   async RegisterUser(
     @Args('registerDto') registerDto: RegisterDto,
-    // @Context() context: { res: Response },
+    @Context() context: { res: Response },
   ): Promise<RegisterResponse> {
     if (
       !registerDto.firstName ||
@@ -30,7 +30,7 @@ export class UsersResolver {
       throw new BadRequestException('Please fill in all required fields');
     }
 
-    const user = await this.userService.RegisterUser(registerDto);
+    const user = await this.userService.RegisterUser(registerDto, context.res);
 
     return { user };
   }
