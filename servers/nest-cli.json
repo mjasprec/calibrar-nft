@@ -27,15 +27,6 @@
       "compilerOptions": {
         "tsConfigPath": "apps/users/tsconfig.app.json"
       }
-    },
-    "nft": {
-      "type": "application",
-      "root": "apps/nft",
-      "entryFile": "main",
-      "sourceRoot": "apps/nft/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/nft/tsconfig.app.json"
-      }
     }
   }
 }
