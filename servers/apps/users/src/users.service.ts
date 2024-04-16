@@ -6,6 +6,21 @@ import { NftDto } from './dto/nft.dto';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CommentDto } from './dto/comment.dto';
 import { Response } from 'express';
+import * as bcrypt from 'bcrypt';
+import { EmailService } from './email/email.service';
+
+interface UserData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  password: string;
+  gender: string;
+  birthday: Date;
+  wallet: number;
+  about: string;
+  role: string;
+}
 
 @Injectable()
 export class UsersService {
@@ -13,6 +28,7 @@ export class UsersService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly prisma: PrismaService,
+    private readonly emailService: EmailService,
   ) {}
 
   async RegisterUser(registerDto: RegisterDto, response: Response) {
@@ -41,19 +57,35 @@ export class UsersService {
       if (isExistingEmail || isExistingUsername) {
         throw new BadRequestException('Username/Email already exists.');
       }
-      const user = await this.prisma.user.create({
-        data: {
-          firstName,
-          lastName,
-          email,
-          username,
-          password,
-          gender,
-          birthday,
-          wallet,
-          about,
-          role,
-        },
+
+      const saltGen = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, saltGen);
+
+      const user = {
+        firstName,
+        lastName,
+        email,
+        username,
+        password: hashedPassword,
+        gender,
+        birthday,
+        wallet,
+        about,
+        role,
+      };
+
+      const activationToken = await this.CreateActivationToken(user);
+
+      const activationCode = activationToken.activationCode;
+
+      console.log('activationCode', activationCode);
+
+      await this.emailService.sendMail({
+        email,
+        subject: 'Activate your account',
+        template: './activation-email',
+        name: `${firstName} ${lastName}`,
+        activationCode,
       });
 
       return { user, response };
@@ -61,6 +93,23 @@ export class UsersService {
       console.log('PRISMA RegisterUser ERROR', error.message);
       throw new BadRequestException(error.message);
     }
+  }
+
+  async CreateActivationToken(user: UserData) {
+    const activationCode = Math.floor(1000 + Math.random() * 9000).toString();
+
+    const token = this.jwtService.sign(
+      {
+        user,
+        activationCode,
+      },
+      {
+        secret: this.configService.get<string>('ACTIVATION_SECRET'),
+        expiresIn: '5m',
+      },
+    );
+
+    return { token, activationCode };
   }
 
   async LoginUser(loginDto: LoginDto) {
