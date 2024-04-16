@@ -6,14 +6,15 @@ import {
   RegisterResponse,
 } from './types/user.types';
 import { ActivationDto, RegisterDto } from './dto/user.dto';
-import { Response } from 'express';
-import { BadRequestException } from '@nestjs/common';
+import { Request, Response } from 'express';
+import { BadRequestException, UseGuards } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { CreateNftResponse } from './types/nft.types';
 import { NftDto } from './dto/nft.dto';
 import { Nft } from './entities/nft.entity';
 import { CreateCommentResponse } from './types/comment.types';
 import { CommentDto } from './dto/comment.dto';
+import { AuthGuard } from './guards/auth.gaurd';
 
 @Resolver('User')
 export class UsersResolver {
@@ -82,6 +83,12 @@ export class UsersResolver {
     @Args('password') password: string,
   ): Promise<LoginResponse> {
     return await this.userService.LoginUser({ email, username, password });
+  }
+
+  @Query(() => LoginResponse)
+  @UseGuards(AuthGuard)
+  async GetLoggedInUser(@Context() context: { req: Request }) {
+    return await this.userService.GetLoggedInUser(context.req);
   }
 
   @Query(() => [Nft])

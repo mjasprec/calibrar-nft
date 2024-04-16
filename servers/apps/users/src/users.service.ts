@@ -215,12 +215,31 @@ export class UsersService {
           user: null,
           accessToken: null,
           refreshToken: null,
+          error: {
+            message: 'Invalid email/username and/or password',
+          },
         };
       }
     } catch (error) {
       console.log('PRISMA LoginUser ERROR', error.message);
       throw new BadRequestException(error.message);
     }
+  }
+
+  async GetLoggedInUser(req: any) {
+    const user = req.user;
+    const accessToken = req.accesstoken;
+    const refreshToken = req.refreshtoken;
+
+    return { user, accessToken, refreshToken };
+  }
+
+  async LogoutUser(req: any) {
+    req.user = null;
+    req.accessToken = null;
+    req.refreshtoken = null;
+
+    return { message: 'Successfully logged out' };
   }
 
   async GetUsers() {
