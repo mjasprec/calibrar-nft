@@ -1,6 +1,10 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UsersService } from './users.service';
-import { ActivationResponse, RegisterResponse } from './types/user.types';
+import {
+  ActivationResponse,
+  LoginResponse,
+  RegisterResponse,
+} from './types/user.types';
 import { ActivationDto, RegisterDto } from './dto/user.dto';
 import { Response } from 'express';
 import { BadRequestException } from '@nestjs/common';
@@ -69,6 +73,15 @@ export class UsersResolver {
     const nft = await this.userService.CreateNft(nftDto);
 
     return { nft };
+  }
+
+  @Mutation(() => LoginResponse)
+  async LoginUser(
+    @Args('email') email: string,
+    @Args('username') username: string,
+    @Args('password') password: string,
+  ): Promise<LoginResponse> {
+    return await this.userService.LoginUser({ email, username, password });
   }
 
   @Query(() => [Nft])

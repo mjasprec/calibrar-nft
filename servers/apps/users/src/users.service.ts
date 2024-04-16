@@ -14,6 +14,7 @@ import { CommentDto } from './dto/comment.dto';
 import { Response } from 'express';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from './email/email.service';
+import { TokenSender } from './utils/sendToken';
 
 interface UserData {
   firstName: string;
@@ -174,11 +175,48 @@ export class UsersService {
 
   async LoginUser(loginDto: LoginDto) {
     try {
-      const { username, password } = loginDto;
+      const { email, username, password } = loginDto;
+      let existingUser;
 
-      const existingUser = { username, password };
+      if (!email && !username) {
+        throw new BadRequestException('Username/Email is required');
+      }
 
-      return existingUser;
+      if (email) {
+        existingUser = await this.prisma.user.findUnique({
+          where: {
+            email,
+          },
+        });
+      }
+
+      if (username) {
+        existingUser = await this.prisma.user.findUnique({
+          where: {
+            username,
+          },
+        });
+      }
+
+      const isPasswordMatch = await bcrypt.compare(
+        password,
+        existingUser.password,
+      );
+
+      if (existingUser && isPasswordMatch) {
+        const tokenSender = new TokenSender(
+          this.jwtService,
+          this.configService,
+        );
+
+        return tokenSender.sendToken(existingUser);
+      } else {
+        return {
+          user: null,
+          accessToken: null,
+          refreshToken: null,
+        };
+      }
     } catch (error) {
       console.log('PRISMA LoginUser ERROR', error.message);
       throw new BadRequestException(error.message);
