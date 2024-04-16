@@ -12,8 +12,17 @@ export class UserErrorType {
 
 @ObjectType()
 export class RegisterResponse {
-  @Field(() => User, { nullable: true })
-  user?: User | any;
+  @Field()
+  activation_token: string;
+
+  @Field(() => UserErrorType, { nullable: true })
+  error?: UserErrorType;
+}
+
+@ObjectType()
+export class ActivationResponse {
+  @Field(() => User)
+  user: User | any;
 
   @Field(() => UserErrorType, { nullable: true })
   error?: UserErrorType;
