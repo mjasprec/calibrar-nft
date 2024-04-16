@@ -27,7 +27,7 @@ export class ActivationResponse {
   @Field(() => ErrorType, { nullable: true })
   error?: ErrorType;
 }
-
+@ObjectType()
 export class LoginResponse {
   @Field(() => User, { nullable: true })
   user?: User | any;
