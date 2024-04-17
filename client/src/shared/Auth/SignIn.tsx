@@ -61,9 +61,13 @@ function SignIn({ setActiveState, setIsModalOpen }: SignInPropType) {
         Cookies.set('access_token', accessToken, { expires: 1 });
         Cookies.set('refresh_token', refreshToken, { expires: 7 });
         setIsModalOpen(false);
+
         toast.success('Login successfully!');
-        reset();
-        window.location.reload();
+
+        setTimeout(() => {
+          reset();
+          window.location.reload();
+        }, 1000);
       } else if (error) {
         toast.error(error.message);
       } else {
