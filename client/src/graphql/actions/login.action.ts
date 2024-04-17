@@ -15,6 +15,9 @@ export const LOGIN_USER: DocumentNode = gql`
         wallet
         about
         role
+        avatar {
+          imgUrl
+        }
       }
       accessToken
       refreshToken

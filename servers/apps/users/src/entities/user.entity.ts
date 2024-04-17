@@ -11,7 +11,7 @@ export class Avatar {
   public_id: string;
 
   @Field()
-  url: string;
+  imgUrl: string;
 
   @Field()
   userId: string;

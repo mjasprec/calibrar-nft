@@ -207,8 +207,18 @@ export class UsersService {
         where: { userId: existingUser.id },
       });
 
+      const getUserAvatar = await this.prisma.avatar.findUnique({
+        where: {
+          userId: existingUser.id,
+        },
+      });
+
       if (getNfts.length > 0) {
         existingUser.nfts = [...getNfts];
+      }
+
+      if (getUserAvatar) {
+        existingUser.avatar = { ...getUserAvatar };
       }
 
       if (existingUser && isPasswordMatch) {
@@ -217,7 +227,9 @@ export class UsersService {
           this.configService,
         );
 
-        return tokenSender.sendToken(existingUser);
+        const user = tokenSender.sendToken(existingUser);
+        console.log('USER', user);
+        return user;
       } else {
         return {
           user: null,
