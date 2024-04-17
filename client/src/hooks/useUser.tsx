@@ -6,7 +6,7 @@ function useUser() {
 
   return {
     loading,
-    user: data?.getLoggedInUser?.user,
+    user: data?.GetLoggedInUser?.user,
   };
 }
 

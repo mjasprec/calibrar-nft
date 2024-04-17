@@ -43,7 +43,7 @@ function ProfileDropDown() {
               as='button'
               className='transition-transform'
               src={
-                user?.avatar?.url ||
+                user?.avatar?.imgUrl ||
                 'https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg'
               }
             />
