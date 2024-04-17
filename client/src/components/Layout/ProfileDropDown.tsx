@@ -25,7 +25,7 @@ function ProfileDropDown() {
 
     console.log('signedIn', signedIn);
     console.log('Profile', user);
-  }, [loading]);
+  }, [loading, user]);
 
   const handleLogout = () => {
     Cookies.remove('access_token');
