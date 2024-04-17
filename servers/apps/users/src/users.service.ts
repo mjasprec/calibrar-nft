@@ -203,6 +203,14 @@ export class UsersService {
         existingUser.password,
       );
 
+      const getNfts = await this.prisma.nft.findMany({
+        where: { userId: existingUser.id },
+      });
+
+      if (getNfts.length > 0) {
+        existingUser.nfts = [...getNfts];
+      }
+
       if (existingUser && isPasswordMatch) {
         const tokenSender = new TokenSender(
           this.jwtService,
