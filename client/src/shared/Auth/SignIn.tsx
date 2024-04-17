@@ -11,7 +11,7 @@ import { z } from 'zod';
 import Cookies from 'js-cookie';
 
 const formSchema = z.object({
-  username: z.string().min(6, 'Username must be at least 6 characters'),
+  usernameOrEmail: z.string().min(6, 'Username must be at least 6 characters'),
   password: z.string().min(6, 'Username must be at least 6 characters'),
 });
 
@@ -37,9 +37,17 @@ function SignIn({ setActiveState, setIsModalOpen }: SignInPropType) {
   });
 
   const onSubmit = async (data: SignInSchema) => {
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
     try {
+      emailRegex.test(data?.usernameOrEmail);
       const loginCredentials = {
-        username: data.username,
+        username: !emailRegex.test(data?.usernameOrEmail)
+          ? data.usernameOrEmail
+          : '',
+        email: emailRegex.test(data?.usernameOrEmail)
+          ? data.usernameOrEmail
+          : '',
         password: data.password,
       };
 
@@ -75,17 +83,17 @@ function SignIn({ setActiveState, setIsModalOpen }: SignInPropType) {
           htmlFor='username'
           className={`${styles.label}`}
         >
-          Username
+          Username/Email
         </label>
         <input
-          {...register('username')}
+          {...register('usernameOrEmail')}
           type='text'
-          placeholder='username'
+          placeholder='username or email'
           className={`${styles.input}`}
         />
-        {errors.username ? (
+        {errors.usernameOrEmail ? (
           <span className={`text-red-500 block mt-1`}>
-            {errors.username.message}
+            {errors.usernameOrEmail.message}
           </span>
         ) : null}
 
