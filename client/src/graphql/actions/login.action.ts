@@ -2,18 +2,19 @@
 import { gql, DocumentNode } from '@apollo/client';
 
 export const LOGIN_USER: DocumentNode = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
+  mutation LoginUser($email: String!, $username: String!, $password: String!) {
+    LoginUser(email: $email, username: $username, password: $password) {
       user {
         firstName
         lastName
         email
         username
         password
-        role
-        about
         gender
+        birthday
         wallet
+        about
+        role
       }
       accessToken
       refreshToken

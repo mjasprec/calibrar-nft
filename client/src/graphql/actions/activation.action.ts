@@ -3,7 +3,7 @@ import { gql, DocumentNode } from '@apollo/client';
 
 export const ACTIVATE_USER: DocumentNode = gql`
   mutation ActivateUser($activationToken: String!, $activationCode: String!) {
-    activateUser(
+    ActivateUser(
       activationDto: {
         activationToken: $activationToken
         activationCode: $activationCode
@@ -15,9 +15,11 @@ export const ACTIVATE_USER: DocumentNode = gql`
         email
         username
         password
-        about
-        wallet
         gender
+        birthday
+        wallet
+        about
+        role
       }
     }
   }

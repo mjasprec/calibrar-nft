@@ -3,36 +3,18 @@ import { gql, DocumentNode } from '@apollo/client';
 
 export const GET_USER: DocumentNode = gql`
   query {
-    getLoggedInUser {
+    GetLoggedInUser {
       user {
-        id
         firstName
         lastName
         email
         username
         password
-        role
-        about
         gender
+        birthday
         wallet
-        avatar {
-          public_id
-          userId
-          id
-          url
-        }
-        nfts {
-          imgUrl
-          userId
-          price
-          name
-          description
-          comments {
-            text
-            nftId
-            userId
-          }
-        }
+        about
+        role
       }
       accessToken
       refreshToken

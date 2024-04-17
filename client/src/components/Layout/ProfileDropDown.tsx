@@ -59,7 +59,7 @@ function ProfileDropDown() {
               <p className='font-semibold text-gray-500 text-[12px]'>
                 Signed in as
               </p>
-              <p className='font-semibold'>{user.username}</p>
+              <p className='font-semibold'>{user?.username}</p>
             </DropdownItem>
             <DropdownItem key='Profile'>
               <p className='font-semibold'>Profile</p>
