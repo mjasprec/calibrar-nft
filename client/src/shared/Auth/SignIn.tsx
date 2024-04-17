@@ -25,7 +25,7 @@ type SignInPropType = {
 function SignIn({ setActiveState, setIsModalOpen }: SignInPropType) {
   const [showPassword, setShowPassword] = useState(false);
 
-  const [login, { loading }] = useMutation(LOGIN_USER);
+  const [LoginUser, { loading }] = useMutation(LOGIN_USER);
 
   const {
     register,
@@ -36,26 +36,26 @@ function SignIn({ setActiveState, setIsModalOpen }: SignInPropType) {
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = async (data: SignInSchema) => {
+  const onSubmit = async (formData: SignInSchema) => {
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     try {
-      emailRegex.test(data?.usernameOrEmail);
+      emailRegex.test(formData?.usernameOrEmail);
       const loginCredentials = {
-        username: !emailRegex.test(data?.usernameOrEmail)
-          ? data.usernameOrEmail
+        username: !emailRegex.test(formData?.usernameOrEmail)
+          ? formData.usernameOrEmail
           : '',
-        email: emailRegex.test(data?.usernameOrEmail)
-          ? data.usernameOrEmail
+        email: emailRegex.test(formData?.usernameOrEmail)
+          ? formData.usernameOrEmail
           : '',
-        password: data.password,
+        password: formData.password,
       };
 
       const {
         data: {
-          login: { user, error, accessToken, refreshToken },
+          LoginUser: { user, accessToken, refreshToken, error },
         },
-      } = await login({ variables: loginCredentials });
+      } = await LoginUser({ variables: loginCredentials });
 
       if (user) {
         Cookies.set('access_token', accessToken, { expires: 1 });
