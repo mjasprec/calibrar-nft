@@ -17,7 +17,7 @@ const formSchema = z.object({
   password: z.string().min(6, 'Username must be at least 6 characters'),
   about: z.string().min(16, 'About must be at least 16 characters'),
   birthday: z.coerce.date(),
-  gender: z.string(),
+  gender: z.coerce.string(),
   wallet: z.coerce.number().nonnegative(),
 });
 

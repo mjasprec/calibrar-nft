@@ -5,25 +5,27 @@ export const REGISTER_USER: DocumentNode = gql`
   mutation RegisterUser(
     $firstName: String!
     $lastName: String!
-    $password: String!
     $email: String!
     $username: String!
+    $password: String!
+    $gender: Genders!
     $birthday: DateTime!
-    $gender: String!
     $about: String!
     $wallet: Float!
+    $role: Roles
   ) {
-    register(
+    RegisterUser(
       registerDto: {
         firstName: $firstName
         lastName: $lastName
-        password: $password
         email: $email
         username: $username
-        birthday: $birthday
+        password: $password
         gender: $gender
+        birthday: $birthday
         about: $about
         wallet: $wallet
+        role: $role
       }
     ) {
       activation_token
