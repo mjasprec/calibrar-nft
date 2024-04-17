@@ -28,7 +28,7 @@ type SignUpPropType = {
 };
 
 function SignUp({ setActiveState }: SignUpPropType) {
-  const [registerUserMutation, { loading }] = useMutation(REGISTER_USER);
+  const [RegisterUser, { loading }] = useMutation(REGISTER_USER);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -43,13 +43,15 @@ function SignUp({ setActiveState }: SignUpPropType) {
 
   const onSubmit = async (data: SignUpSchema) => {
     try {
-      const response = await registerUserMutation({
+      const response = await RegisterUser({
         variables: data,
       });
+
       localStorage.setItem(
         'activation_token',
-        response.data.register.activation_token
+        response.data.RegisterUser.activation_token
       );
+
       toast.success('Please check your email to activate your account.');
       reset();
       setActiveState('verification');
