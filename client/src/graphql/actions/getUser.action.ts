@@ -15,6 +15,17 @@ export const GET_USER: DocumentNode = gql`
         wallet
         about
         role
+        avatar {
+          imgUrl
+        }
+        nfts {
+          name
+          description
+          price
+          category
+          imgUrl
+          userId
+        }
       }
       accessToken
       refreshToken

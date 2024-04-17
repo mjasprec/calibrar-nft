@@ -55,6 +55,6 @@ export class User {
   @Field(() => Avatar, { nullable: true })
   avatar?: Avatar | null;
 
-  @Field(() => Nft, { nullable: true })
-  nfts?: Nft | null;
+  @Field(() => [Nft], { nullable: true })
+  nfts?: [Nft] | null;
 }

@@ -251,6 +251,26 @@ export class UsersService {
     const accessToken = req.accesstoken;
     const refreshToken = req.refreshtoken;
 
+    const getUserAvatar = await this.prisma.avatar.findUnique({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    const getNfts = await this.prisma.nft.findMany({
+      where: { userId: user.id },
+    });
+
+    if (getUserAvatar) {
+      user.avatar = { ...getUserAvatar };
+    }
+
+    if (getNfts.length > 0) {
+      user.nfts = [...getNfts];
+    }
+
+    console.log('GetLoggedInUser req.user', req.user);
+
     return { user, accessToken, refreshToken };
   }
 
