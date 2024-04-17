@@ -80,10 +80,10 @@ export class ActivationDto {
 export class LoginDto {
   @Field({ nullable: true })
   // @IsNotEmpty({ message: 'Name is required.' })
-  username: string;
+  username?: string;
 
   @Field({ nullable: true })
-  email: string;
+  email?: string;
 
   @Field()
   @IsNotEmpty({ message: 'Name is required.' })
