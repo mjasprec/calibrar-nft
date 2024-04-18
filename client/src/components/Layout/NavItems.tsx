@@ -1,17 +1,10 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React from 'react';
+import useUser from '@/hooks/useUser';
+import React, { useEffect, useState } from 'react';
 
-const navItems = [
-  {
-    title: 'Home',
-    url: '/',
-  },
-  {
-    title: 'Marketplace',
-    url: '/marketplace',
-  },
+const authenticatedLinks = [
   {
     title: 'NFT',
     url: '/nft',
@@ -28,6 +21,23 @@ const navItems = [
 
 function NavItems() {
   const pathname = usePathname();
+  const { user } = useUser();
+  const [navItems, setNavItems] = useState([
+    {
+      title: 'Home',
+      url: '/',
+    },
+    {
+      title: 'Marketplace',
+      url: '/marketplace',
+    },
+  ]);
+
+  useEffect(() => {
+    if (user) {
+      setNavItems([...navItems, ...authenticatedLinks]);
+    }
+  }, [user]);
 
   return (
     <div>

@@ -11,6 +11,7 @@
   "dependencies": {
     "@apollo/client": "^3.9.10",
     "@hookform/resolvers": "^3.3.4",
+    "@nextui-org/dropdown": "^2.1.20",
     "@nextui-org/react": "^2.2.10",
     "framer-motion": "^11.0.25",
     "graphql": "^16.8.1",

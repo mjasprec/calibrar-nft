@@ -227,9 +227,7 @@ export class UsersService {
           this.configService,
         );
 
-        const user = tokenSender.sendToken(existingUser);
-        console.log('USER', user);
-        return user;
+        return tokenSender.sendToken(existingUser);
       } else {
         return {
           user: null,
@@ -268,8 +266,6 @@ export class UsersService {
     if (getNfts.length > 0) {
       user.nfts = [...getNfts];
     }
-
-    console.log('GetLoggedInUser req.user', req.user);
 
     return { user, accessToken, refreshToken };
   }

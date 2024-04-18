@@ -38,6 +38,13 @@ export class AuthGuard implements CanActivate {
       }
 
       await this.updateAccessToken(req);
+      // const decode = this.jwtService.decode(accesstoken);
+
+      // const expirationTime = decode?.exp;
+
+      // if (expirationTime < Date.now()) {
+      //   await this.updateAccessToken(req);
+      // }
     }
 
     return true;
