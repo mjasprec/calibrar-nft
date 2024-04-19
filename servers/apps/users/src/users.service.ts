@@ -248,29 +248,33 @@ export class UsersService {
   }
 
   async GetLoggedInUser(req: any) {
-    const user = req.user;
-    const accessToken = req.accesstoken;
-    const refreshToken = req.refreshtoken;
+    try {
+      const user = req.user;
+      const accessToken = req.accesstoken;
+      const refreshToken = req.refreshtoken;
 
-    const getUserAvatar = await this.prisma.avatar.findUnique({
-      where: {
-        userId: user.id,
-      },
-    });
+      const getUserAvatar = await this.prisma.avatar.findUnique({
+        where: {
+          userId: user.id,
+        },
+      });
 
-    const getNfts = await this.prisma.nft.findMany({
-      where: { userId: user.id },
-    });
+      const getNfts = await this.prisma.nft.findMany({
+        where: { userId: user.id },
+      });
 
-    if (getUserAvatar) {
-      user.avatar = { ...getUserAvatar };
+      if (getUserAvatar) {
+        user.avatar = { ...getUserAvatar };
+      }
+
+      if (getNfts.length > 0) {
+        user.nfts = [...getNfts];
+      }
+
+      return { user, accessToken, refreshToken };
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-
-    if (getNfts.length > 0) {
-      user.nfts = [...getNfts];
-    }
-
-    return { user, accessToken, refreshToken };
   }
 
   async ForgotPassword(forgotPasswordDto: ForgotPasswordDto) {
@@ -305,13 +309,14 @@ export class UsersService {
 
   async GenerateForgotPasswordLink(user: User) {
     const forgotPasswordToken = this.jwtService.sign(
-      { user },
       {
-        secret: this.configService.get<string>('FORGOT_PASSWORDS_SECRET'),
+        user,
+      },
+      {
+        secret: this.configService.get<string>('FORGOT_PASSWORD_SECRET'),
         expiresIn: '5m',
       },
     );
-
     return forgotPasswordToken;
   }
 

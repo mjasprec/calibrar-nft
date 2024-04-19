@@ -1,5 +1,7 @@
 'use client';
+import { FORGOT_PASSWORD } from '@/graphql/actions/forgotPassword.action';
 import styles from '@/utils/styles';
+import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
@@ -17,6 +19,8 @@ type ForgotPasswordProps = {
 };
 
 function ForgotPassword({ setActiveState }: ForgotPasswordProps) {
+  const [ForgotPassword, { loading }] = useMutation(FORGOT_PASSWORD);
+
   const {
     register,
     handleSubmit,
@@ -30,9 +34,14 @@ function ForgotPassword({ setActiveState }: ForgotPasswordProps) {
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     emailRegex.test(formData?.email);
 
-    console.log('FORM DATA', formData);
-
     try {
+      const { data } = await ForgotPassword({
+        variables: {
+          email: formData.email,
+        },
+      });
+
+      toast.success(data.ForgotPassword.message);
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -65,7 +74,7 @@ function ForgotPassword({ setActiveState }: ForgotPasswordProps) {
           <input
             type='submit'
             value='Submit'
-            disabled={isSubmitting}
+            disabled={isSubmitting || loading}
             className={`${styles.button} mt-3`}
           />
         </div>
