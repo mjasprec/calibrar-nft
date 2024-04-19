@@ -7,6 +7,7 @@ import {
   Genders,
   LoginDto,
   RegisterDto,
+  ResetPasswordDto,
   Roles,
 } from './dto/user.dto';
 import { NftDto } from './dto/nft.dto';
@@ -312,6 +313,33 @@ export class UsersService {
     );
 
     return forgotPasswordToken;
+  }
+
+  async ResetPassword(resetPasswordDto: ResetPasswordDto) {
+    try {
+      const { password, activationToken } = resetPasswordDto;
+
+      const decoded = await this.jwtService.decode(activationToken);
+
+      if (!decoded) {
+        throw new BadRequestException('Invalid activation token');
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const user = await this.prisma.user.update({
+        where: {
+          id: decoded.user.id,
+        },
+        data: {
+          password: hashedPassword,
+        },
+      });
+
+      return { user };
+    } catch (error: any) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async LogoutUser(req: any) {

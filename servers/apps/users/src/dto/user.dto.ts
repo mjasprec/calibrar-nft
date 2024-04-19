@@ -86,7 +86,8 @@ export class LoginDto {
   email?: string;
 
   @Field()
-  @IsNotEmpty({ message: 'Name is required.' })
+  @IsNotEmpty({ message: 'Password is required.' })
+  @MinLength(6, { message: 'Password must be at least 6 characters' })
   password: string;
 }
 @InputType()
@@ -95,4 +96,16 @@ export class ForgotPasswordDto {
   @IsNotEmpty({ message: 'Email address is required.' })
   @IsEmail({}, { message: 'Must be a valid email address .' })
   email: string;
+}
+
+@InputType()
+export class ResetPasswordDto {
+  @Field()
+  @IsNotEmpty({ message: 'Password is required.' })
+  @MinLength(6, { message: 'Password must be at least 6 characters' })
+  password: string;
+
+  @Field()
+  @IsNotEmpty({ message: 'Activation token is required' })
+  activationToken: string;
 }
