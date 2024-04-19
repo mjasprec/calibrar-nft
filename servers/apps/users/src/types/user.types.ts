@@ -43,6 +43,15 @@ export class LoginResponse {
 }
 
 @ObjectType()
+export class ForgotPasswordResponse {
+  @Field()
+  message: string;
+
+  @Field(() => ErrorType, { nullable: true })
+  error?: ErrorType;
+}
+
+@ObjectType()
 export class LogoutResponse {
   @Field()
   message?: string;

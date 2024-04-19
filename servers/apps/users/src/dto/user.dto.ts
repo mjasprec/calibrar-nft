@@ -89,3 +89,10 @@ export class LoginDto {
   @IsNotEmpty({ message: 'Name is required.' })
   password: string;
 }
+@InputType()
+export class ForgotPasswordDto {
+  @Field()
+  @IsNotEmpty({ message: 'Email address is required.' })
+  @IsEmail({}, { message: 'Must be a valid email address .' })
+  email: string;
+}

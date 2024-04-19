@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 import {
   ActivationDto,
+  ForgotPasswordDto,
   Genders,
   LoginDto,
   RegisterDto,
@@ -15,6 +16,7 @@ import { Response } from 'express';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from './email/email.service';
 import { TokenSender } from './utils/sendToken';
+import { User } from '@prisma/client';
 
 interface UserData {
   firstName: string;
@@ -268,6 +270,48 @@ export class UsersService {
     }
 
     return { user, accessToken, refreshToken };
+  }
+
+  async ForgotPassword(forgotPasswordDto: ForgotPasswordDto) {
+    const { email } = forgotPasswordDto;
+
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      throw new BadRequestException('Email does not exist/Invalid email');
+    }
+
+    const forgotPasswordToken = await this.GenerateForgotPasswordLink(user);
+
+    // console.log('forgotPasswordToken', forgotPasswordToken);
+
+    const resetPasswordUrl = `${this.configService.get<string>('CLIENT_SIDE_URI')}/reset-password?verify=${forgotPasswordToken}`;
+
+    await this.emailService.sendMail({
+      email: user.email,
+      subject: 'Reset your password',
+      template: './forgot-password',
+      name: `${user.firstName} ${user.lastName}`,
+      activationCode: resetPasswordUrl,
+    });
+
+    return { message: 'Your forgot password request was successful!' };
+  }
+
+  async GenerateForgotPasswordLink(user: User) {
+    const forgotPasswordToken = this.jwtService.sign(
+      { user },
+      {
+        secret: this.configService.get<string>('FORGOT_PASSWORDS_SECRET'),
+        expiresIn: '5m',
+      },
+    );
+
+    return forgotPasswordToken;
   }
 
   async LogoutUser(req: any) {
