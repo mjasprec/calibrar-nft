@@ -139,6 +139,7 @@ function SignIn({ setActiveState, setIsModalOpen }: SignInPropType) {
         <div className='w-full mt-5'>
           <span
             className={`${styles.label} my-2 text-[#2190ff] block text-right cursor-pointer`}
+            onClick={() => setActiveState('forgot-password')}
           >
             Forgot your password?
           </span>

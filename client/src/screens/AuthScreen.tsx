@@ -1,4 +1,5 @@
 'use client';
+import ForgotPassword from '@/shared/Auth/ForgotPassword';
 import Otp from '@/shared/Auth/Otp';
 import SignIn from '@/shared/Auth/SignIn';
 import SignUp from '@/shared/Auth/SignUp';
@@ -37,6 +38,10 @@ function AuthScreen({ setIsModalOpen }: AuthScreenType) {
 
         {activeState === 'verification' ? (
           <Otp setActiveState={setActiveState} />
+        ) : null}
+
+        {activeState === 'forgot-password' ? (
+          <ForgotPassword setActiveState={setActiveState} />
         ) : null}
       </div>
     </div>
