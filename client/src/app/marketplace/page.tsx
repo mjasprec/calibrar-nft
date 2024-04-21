@@ -25,8 +25,6 @@ export default function Home() {
     }
   }, [loading, nfts]);
 
-  console.log('loading', loading);
-  console.log('isNfts', isNfts);
   return (
     <HomeScreen>
       <div className='h-screen max-w-[900px] mx-auto my-8 '>
