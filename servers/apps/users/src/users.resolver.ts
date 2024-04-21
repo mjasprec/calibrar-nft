@@ -59,11 +59,6 @@ export class UsersResolver {
     return this.userService.ActivateUser(activationDto, context.res);
   }
 
-  @Query(() => [User])
-  async GetUsers() {
-    return this.userService.GetUsers();
-  }
-
   // NFT
   @Mutation(() => CreateNftResponse)
   async CreateNft(
@@ -97,6 +92,11 @@ export class UsersResolver {
   @UseGuards(AuthGuard)
   async GetLoggedInUser(@Context() context: { req: Request }) {
     return await this.userService.GetLoggedInUser(context.req);
+  }
+
+  @Query(() => [User])
+  async GetUsers() {
+    return this.userService.GetUsers();
   }
 
   @Mutation(() => ForgotPasswordResponse)

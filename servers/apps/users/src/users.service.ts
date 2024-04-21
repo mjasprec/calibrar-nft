@@ -19,6 +19,22 @@ import { EmailService } from './email/email.service';
 import { TokenSender } from './utils/sendToken';
 import { User } from '@prisma/client';
 
+type Nft = {
+  id: string;
+  userId: string;
+  name: string;
+  description: string;
+  imgUrl: string;
+  price: number;
+  category: string;
+};
+
+type Avatar = {
+  id: string;
+  imgUrl: string;
+  userId: string;
+};
+
 interface UserData {
   firstName: string;
   lastName: string;
@@ -30,6 +46,8 @@ interface UserData {
   wallet: number;
   about: string;
   role: Roles;
+  avatar?: Avatar;
+  nfts?: [Nft];
 }
 
 @Injectable()
@@ -277,6 +295,27 @@ export class UsersService {
     }
   }
 
+  async GetUsers() {
+    try {
+      const users: any = await this.prisma.user.findMany({});
+
+      const newUsers = await users.map(async (user) => {
+        user.avatar = await this.prisma.avatar.findUnique({
+          where: {
+            userId: user.id,
+          },
+        });
+
+        return user;
+      });
+
+      return newUsers;
+    } catch (error) {
+      console.log('PRISMA GetUsers ERROR', error.message);
+      throw new BadRequestException(error.message);
+    }
+  }
+
   async ForgotPassword(forgotPasswordDto: ForgotPasswordDto) {
     const { email } = forgotPasswordDto;
 
@@ -355,17 +394,6 @@ export class UsersService {
     return { message: 'Successfully logged out' };
   }
 
-  async GetUsers() {
-    try {
-      const users = this.prisma.user.findMany({});
-
-      return users;
-    } catch (error) {
-      console.log('PRISMA GetUsers ERROR', error.message);
-      throw new BadRequestException(error.message);
-    }
-  }
-
   // NFT
   async CreateNft(nftDto: NftDto) {
     const { userId, name, description, imgUrl, price, category } = nftDto;
@@ -385,6 +413,13 @@ export class UsersService {
   async GetAllNft() {
     try {
       const nfts = this.prisma.nft.findMany({});
+
+      // const nftWithOwner = await nfts.map(async (nft) => {
+      //   nft.owner = await this.prisma.user.findUnique({
+      //     where: { id: nft.userId },
+      //   });
+      //   return nft;
+      // });
 
       return nfts;
     } catch (error) {
