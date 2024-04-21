@@ -20,7 +20,6 @@ function ProfileDropDown() {
   }, [loading, user]);
 
   const handleLogout = () => {
-    console.log('CLICKED handleLogout');
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
     toast.success('Logout successfully');

@@ -1,12 +1,21 @@
 'use client';
+import useUser from '@/hooks/useUser';
 import AuthScreen from '@/screens/AuthScreen';
 import HomeScreen from '@/screens/HomeScreen';
 import styles from '@/utils/styles';
 import { Button } from '@nextui-org/button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
+  const { loading, user } = useUser();
+  const [signedIn, setSignedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!loading) {
+      setSignedIn(!!user);
+    }
+  }, [loading, user]);
 
   return (
     <HomeScreen>
@@ -24,12 +33,14 @@ export default function Home() {
             suscipit, lobortis mauris ac, varius ipsum.
           </p>
           <br />
-          <Button
-            className={`${styles.button} w-[180px] md:mb-12`}
-            onClick={() => setIsModalOpen((prev) => !prev)}
-          >
-            Sign In
-          </Button>
+          {signedIn ? null : (
+            <Button
+              className={`${styles.button} w-[180px] md:mb-12`}
+              onClick={() => setIsModalOpen((prev) => !prev)}
+            >
+              Sign In
+            </Button>
+          )}
         </div>
       </div>
       {isModalOpen ? <AuthScreen setIsModalOpen={setIsModalOpen} /> : null}

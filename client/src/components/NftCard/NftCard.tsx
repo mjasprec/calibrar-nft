@@ -62,12 +62,14 @@ function NftCard({
             <b>{category}</b>
           </div>
 
-          <input
-            type='submit'
-            value='Buy'
-            disabled={false}
-            className={`${styles.buttonPurchase} mt-3`}
-          />
+          {isOwner ? null : (
+            <input
+              type='submit'
+              value='Buy'
+              disabled={false}
+              className={`${styles.buttonPurchase} mt-3`}
+            />
+          )}
 
           {isAdmin || isOwner ? (
             <div className='flex gap-3'>
