@@ -10,7 +10,7 @@ import {
   ResetPasswordDto,
   Roles,
 } from './dto/user.dto';
-import { NftDto } from './dto/nft.dto';
+import { NftDto, UpdateNftDto } from './dto/nft.dto';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CommentDto } from './dto/comment.dto';
 import { Response } from 'express';
@@ -406,6 +406,22 @@ export class UsersService {
       return newNft;
     } catch (error) {
       console.log('PRISMA CreateNft ERROR', error.message);
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async UpdateNft(updateNftDto: UpdateNftDto) {
+    try {
+      const { id, name, description, price, imgUrl, category } = updateNftDto;
+
+      const updatedNft = await this.prisma.nft.update({
+        where: { id },
+        data: { imgUrl, name, description, price, category },
+      });
+
+      return updatedNft;
+    } catch (error: any) {
+      console.log('UpdateNft', error.message);
       throw new BadRequestException(error.message);
     }
   }

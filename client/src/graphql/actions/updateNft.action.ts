@@ -2,7 +2,7 @@ import { gql, DocumentNode } from '@apollo/client';
 
 export const UPDATE_NFT: DocumentNode = gql`
   mutation UpdateNft(
-    $nftId: String!
+    $id: String!
     $name: String!
     $description: String!
     $price: String!
@@ -11,7 +11,7 @@ export const UPDATE_NFT: DocumentNode = gql`
   ) {
     UpdateNft(
       updateNftDto: {
-        nftId: $nftId
+        id: $id
         name: $name
         description: $description
         price: $price
@@ -20,7 +20,7 @@ export const UPDATE_NFT: DocumentNode = gql`
       }
     ) {
       nft {
-        nftId
+        id
         name
         description
         price

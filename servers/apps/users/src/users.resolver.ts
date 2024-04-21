@@ -18,7 +18,7 @@ import { Request, Response } from 'express';
 import { BadRequestException, UseGuards } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { CreateNftResponse } from './types/nft.types';
-import { NftDto } from './dto/nft.dto';
+import { NftDto, UpdateNftDto } from './dto/nft.dto';
 import { Nft } from './entities/nft.entity';
 import { CreateCommentResponse } from './types/comment.types';
 import { CommentDto } from './dto/comment.dto';
@@ -125,6 +125,14 @@ export class UsersResolver {
   @Query(() => [Nft])
   async GetAllNft() {
     return this.userService.GetAllNft();
+  }
+
+  @Mutation(() => CreateNftResponse)
+  @UseGuards(AuthGuard)
+  async UpdateNft(@Args('updateNftDto') updateNftDto: UpdateNftDto) {
+    const nft = await this.userService.UpdateNft(updateNftDto);
+
+    return { nft };
   }
 
   // NFT Comment
