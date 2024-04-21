@@ -1,5 +1,5 @@
 'use client';
-import { RESET_PASSWORD } from '@/graphql/actions/resetPassword';
+import { RESET_PASSWORD } from '@/graphql/actions/resetPassword.action';
 import styles from '@/utils/styles';
 import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
