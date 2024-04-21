@@ -326,7 +326,7 @@ export class UsersService {
 
       const decoded = await this.jwtService.decode(activationToken);
 
-      if (!decoded) {
+      if (!decoded || decoded?.exp * 1000 < Date.now()) {
         throw new BadRequestException('Invalid activation token');
       }
 
