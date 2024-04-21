@@ -1,7 +1,9 @@
 'use client';
+import { UPDATE_NFT } from '@/graphql/actions/updateNft.action';
 import styles from '@/utils/styles';
+import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
@@ -17,12 +19,27 @@ const formSchema = z.object({
 type NftSchema = z.infer<typeof formSchema>;
 
 type NftFormPropTypes = {
-  id?: string;
+  isNftModal: boolean;
+  setIsNftModal: Dispatch<SetStateAction<boolean>>;
+  nftId: string;
+  name: string;
+  description: string;
+  price: string;
+  category: string;
+  imgUrl: string;
 };
 
-function NftForm({ id }: NftFormPropTypes) {
-  const [isNftModal, setIsNftModal] = useState(false);
-
+function NftForm({
+  nftId,
+  name,
+  description,
+  price,
+  category,
+  imgUrl,
+  isNftModal,
+  setIsNftModal,
+}: NftFormPropTypes) {
+  const [RegisterUser, { loading }] = useMutation(UPDATE_NFT);
   const {
     register,
     handleSubmit,
@@ -42,7 +59,6 @@ function NftForm({ id }: NftFormPropTypes) {
   };
 
   const handleCloseModal = (e: any) => {
-    console.log('e.target.id', e.target.id);
     if (e.target.id === 'nft-screen') {
       setIsNftModal(false);
     }
@@ -75,6 +91,7 @@ function NftForm({ id }: NftFormPropTypes) {
                   type='text'
                   placeholder='name'
                   className={`${styles.input}`}
+                  value={name ? name : ''}
                 />
                 {errors.name ? (
                   <span className={`text-red-500 block mt-1`}>
@@ -82,25 +99,27 @@ function NftForm({ id }: NftFormPropTypes) {
                   </span>
                 ) : null}
               </div>
-              <div className='w-full mt-3 relative mb-1'>
-                <label
-                  htmlFor='description'
-                  className={`${styles.label}`}
-                >
-                  Description
-                </label>
-                <input
-                  {...register('description')}
-                  type='text'
-                  placeholder='description'
-                  className={`${styles.input}`}
-                />
-                {errors.description ? (
-                  <span className={`text-red-500 block mt-1`}>
-                    {errors.description.message}
-                  </span>
-                ) : null}
-              </div>
+            </div>
+
+            <div className='w-full mt-3 relative mb-1'>
+              <label
+                htmlFor='description'
+                className={`${styles.label}`}
+              >
+                Description
+              </label>
+              <input
+                {...register('description')}
+                type='text'
+                placeholder='description'
+                className={`${styles.input}`}
+                value={description ? description : ''}
+              />
+              {errors.description ? (
+                <span className={`text-red-500 block mt-1`}>
+                  {errors.description.message}
+                </span>
+              ) : null}
             </div>
 
             <div className='flex flex-row gap-4'>
@@ -116,6 +135,7 @@ function NftForm({ id }: NftFormPropTypes) {
                   type='text'
                   placeholder='price'
                   className={`${styles.input}`}
+                  value={price ? price : ''}
                 />
                 {errors.price ? (
                   <span className={`text-red-500 block mt-1`}>
@@ -123,25 +143,7 @@ function NftForm({ id }: NftFormPropTypes) {
                   </span>
                 ) : null}
               </div>
-              <div className='w-full mt-3 relative mb-1'>
-                <label
-                  htmlFor='imgUrl'
-                  className={`${styles.label}`}
-                >
-                  Image Url
-                </label>
-                <input
-                  {...register('imgUrl')}
-                  type='text'
-                  placeholder='url'
-                  className={`${styles.input}`}
-                />
-                {errors.imgUrl ? (
-                  <span className={`text-red-500 block mt-1`}>
-                    {errors.imgUrl.message}
-                  </span>
-                ) : null}
-              </div>
+
               <div className='w-full mt-3 relative mb-1'>
                 <label
                   htmlFor='category'
@@ -153,6 +155,7 @@ function NftForm({ id }: NftFormPropTypes) {
                 <select
                   {...register('category')}
                   className={`${styles.input}`}
+                  value={category ? category : ''}
                 >
                   <option value='basketball'>Basketball</option>
                   <option value='boxing'>Boxing</option>
@@ -166,6 +169,35 @@ function NftForm({ id }: NftFormPropTypes) {
                   </span>
                 ) : null}
               </div>
+            </div>
+            <div className='w-full mt-3 relative mb-1'>
+              <label
+                htmlFor='imgUrl'
+                className={`${styles.label}`}
+              >
+                Image Url
+              </label>
+              <input
+                {...register('imgUrl')}
+                type='text'
+                placeholder='url'
+                className={`${styles.input}`}
+                value={imgUrl ? imgUrl : ''}
+              />
+              {errors.imgUrl ? (
+                <span className={`text-red-500 block mt-1`}>
+                  {errors.imgUrl.message}
+                </span>
+              ) : null}
+            </div>
+
+            <div className='w-full mt-3'>
+              <input
+                type='submit'
+                value='Sign Up'
+                disabled={isSubmitting || loading}
+                className={`${styles.button} mt-3`}
+              />
             </div>
           </form>
         </div>

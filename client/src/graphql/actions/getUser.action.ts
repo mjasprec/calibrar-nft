@@ -19,6 +19,7 @@ export const GET_USER: DocumentNode = gql`
           imgUrl
         }
         nfts {
+          id
           name
           description
           price

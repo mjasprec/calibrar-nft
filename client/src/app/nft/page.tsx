@@ -1,11 +1,11 @@
 'use client';
 import NftCard from '@/components/NftCard/NftCard';
-import NftForm from '@/components/NftForm/NftForm';
 import useUser from '@/hooks/useUser';
 import HomeScreen from '@/screens/HomeScreen';
 import { useEffect, useState } from 'react';
 
 type NftPropType = {
+  id: string;
   name: string;
   description: string;
   price: string;
@@ -24,14 +24,16 @@ export default function Home() {
     }
   }, [loading, user]);
 
+  // console.log('isUserData', isUserData);
+
   return (
     <HomeScreen>
       <div className='h-screen max-w-[900px] mx-auto my-8 '>
-        <NftForm />
         <div className='grid grid-cols-3 gap-4'>
           {isUserData?.nfts?.length > 0
             ? isUserData?.nfts?.map(
                 ({
+                  id,
                   name,
                   description,
                   price,
@@ -41,6 +43,7 @@ export default function Home() {
                 }: NftPropType) => (
                   <NftCard
                     idx={idx}
+                    nftId={id}
                     name={name}
                     description={description}
                     price={price}
