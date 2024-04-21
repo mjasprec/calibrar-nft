@@ -62,3 +62,27 @@ input::-webkit-inner-spin-button {
     transform: translateX(0);
   }
 }
+
+.banner {
+  background-image: url('https://preview.redd.it/ihxbcmi7fod51.jpg?auto=webp&s=80eef3b1d60c2e10025dfc7ed49319e417620317');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.backdrop_shaders {
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    #180f34 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  flex: none;
+  inset: -273px 290px 51px -557px;
+  overflow: hidden;
+  position: absolute;
+  top: 90px;
+  z-index: -1;
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out;
+}

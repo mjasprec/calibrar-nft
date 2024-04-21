@@ -1,3 +1,4 @@
+import styles from '@/utils/styles';
 import {
   Card,
   CardHeader,
@@ -13,6 +14,8 @@ type NftCardProps = {
   category: string;
   imgUrl: string;
   idx: number;
+  isAdmin?: boolean;
+  isOwner?: boolean;
 };
 
 function NftCard({
@@ -22,6 +25,8 @@ function NftCard({
   category,
   imgUrl,
   idx,
+  isAdmin,
+  isOwner,
 }: NftCardProps) {
   return (
     <Card
@@ -40,20 +45,46 @@ function NftCard({
           src={imgUrl}
         />
       </CardBody>
-      <CardFooter className='text-small justify-between grid grid-col-3'>
-        <div>
-          <b>{name}</b>
-          <p className='text-default-500'>{description}</p>
-        </div>
+      <CardFooter className='text-small justify-between'>
+        <div className='w-full '>
+          <div>
+            <b>{name}</b>
+            <p className='text-default-500'>{description}</p>
+          </div>
 
-        <div className='flex justify-between'>
-          <b>Price</b>
-          <p className='text-default-500'>${price}</p>
-        </div>
+          <div className='flex justify-between'>
+            <p className='text-default-500'>Price</p>
+            <b>${price}</b>
+          </div>
 
-        <div className='flex justify-between'>
-          <b>Category</b>
-          <p className='text-default-500'>{category}</p>
+          <div className='flex justify-between'>
+            <p className='text-default-500'>Category</p>
+            <b>{category}</b>
+          </div>
+
+          <input
+            type='submit'
+            value='Buy'
+            disabled={false}
+            className={`${styles.buttonPurchase} mt-3`}
+          />
+
+          {isAdmin || isOwner ? (
+            <div className='flex gap-3'>
+              <input
+                type='submit'
+                value='Delete'
+                disabled={false}
+                className={`${styles.buttonDanger} mt-3`}
+              />
+              <input
+                type='submit'
+                value='Edit'
+                disabled={false}
+                className={`${styles.buttonInfo} mt-3`}
+              />
+            </div>
+          ) : null}
         </div>
       </CardFooter>
     </Card>

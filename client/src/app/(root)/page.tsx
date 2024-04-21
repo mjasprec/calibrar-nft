@@ -1,57 +1,38 @@
 'use client';
-import NftCard from '@/components/NftCard/NftCard';
-import useNfts from '@/hooks/useNfts';
+import AuthScreen from '@/screens/AuthScreen';
 import HomeScreen from '@/screens/HomeScreen';
-import { useEffect, useState } from 'react';
-
-type NftPropType = {
-  name: string;
-  description: string;
-  price: string;
-  category: string;
-  imgUrl: string;
-  idx: number;
-};
+import styles from '@/utils/styles';
+import { Button } from '@nextui-org/button';
+import { useState } from 'react';
 
 export default function Home() {
-  const [isNfts, setIsNfts] = useState([]);
-  const { loading, nfts } = useNfts();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    if (!loading && nfts) {
-      setIsNfts(nfts);
-    }
-  }, [loading, nfts]);
-
-  console.log('loading', loading);
-  console.log('isNfts', isNfts);
   return (
     <HomeScreen>
-      <div className='h-screen max-w-[900px] mx-auto my-8'>
-        <div className='grid grid-cols-3 gap-4'>
-          {isNfts?.length > 0
-            ? isNfts?.map(
-                ({
-                  name,
-                  description,
-                  price,
-                  category,
-                  imgUrl,
-                  idx,
-                }: NftPropType) => (
-                  <NftCard
-                    idx={idx}
-                    name={name}
-                    description={description}
-                    price={price}
-                    category={category}
-                    imgUrl={imgUrl}
-                  />
-                )
-              )
-            : null}
+      <div className='w-full h-[92vh] banner flex items-center z-10 absolute'>
+        <div className='backdrop_shaders w-full' />
+        <div className='w-[80%] m-auto'>
+          <h1 className='text-4xl py-5 xl:text-6xl font-[700] xl:leading-[80px] sm:mt-20 font-Inter'>
+            NFT <br />
+            Marketplace
+          </h1>
+          <p className={`${styles.label} !text-[18px]`}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            <br /> Duis dignissim velit sit amet nulla suscipit malesuada.
+            Aenean dictum enim in dolor feugiat viverra. <br /> Nunc vel nibh
+            suscipit, lobortis mauris ac, varius ipsum.
+          </p>
+          <br />
+          <Button
+            className={`${styles.button} w-[180px] md:mb-12`}
+            onClick={() => setIsModalOpen((prev) => !prev)}
+          >
+            Sign In
+          </Button>
         </div>
       </div>
+      {isModalOpen ? <AuthScreen setIsModalOpen={setIsModalOpen} /> : null}
     </HomeScreen>
   );
 }
