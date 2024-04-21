@@ -34,7 +34,6 @@ model Avatar {
   id  String @id @default(auto()) @map("_id") @db.ObjectId
   userId  String @unique @db.ObjectId
   imgUrl  String
-  public_id String
   user User @relation(fields: [userId], references: [id])
 }
 

@@ -8,9 +8,6 @@ export class Avatar {
   id: string;
 
   @Field()
-  public_id: string;
-
-  @Field()
   imgUrl: string;
 
   @Field()
