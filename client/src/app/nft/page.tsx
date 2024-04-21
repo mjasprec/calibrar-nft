@@ -8,7 +8,7 @@ type NftPropType = {
   id: string;
   name: string;
   description: string;
-  price: string;
+  price: number;
   category: string;
   imgUrl: string;
   idx: number;

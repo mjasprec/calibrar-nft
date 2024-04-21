@@ -5,8 +5,8 @@ export const UPDATE_NFT: DocumentNode = gql`
     $id: String!
     $name: String!
     $description: String!
-    $price: String!
-    $category: String!
+    $price: Float!
+    $category: NftCategory!
     $imgUrl: String!
   ) {
     UpdateNft(

@@ -3,7 +3,7 @@ import { UPDATE_NFT } from '@/graphql/actions/updateNft.action';
 import styles from '@/utils/styles';
 import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
@@ -24,7 +24,7 @@ type NftFormPropTypes = {
   nftId: string;
   name: string;
   description: string;
-  price: string;
+  price: number;
   category: string;
   imgUrl: string;
 };
@@ -39,19 +39,47 @@ function NftForm({
   isNftModal,
   setIsNftModal,
 }: NftFormPropTypes) {
-  const [RegisterUser, { loading }] = useMutation(UPDATE_NFT);
+  const [UpdateNft, { loading }] = useMutation(UPDATE_NFT);
+  const [formValues, setFormValues] = useState<any>({});
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    getValues,
   } = useForm<NftSchema>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      name,
+      description,
+      price,
+      category,
+      imgUrl,
+    },
   });
+
+  const values = getValues();
+
+  useEffect(() => {
+    if (values) {
+      setFormValues(values);
+    }
+  }, []);
 
   const onSubmit = async (data: NftSchema) => {
     try {
-      toast.success('Please check your email to activate your account.');
+      const response = await UpdateNft({
+        variables: {
+          id: nftId,
+          name: data?.name,
+          description: data?.description,
+          price: data?.price,
+          category: data?.category,
+          imgUrl: data?.imgUrl,
+        },
+      });
+      console.log('response', response);
+      toast.success('Updated NFT successfully.');
       reset();
     } catch (error: any) {
       toast.error(error.message);
@@ -91,7 +119,6 @@ function NftForm({
                   type='text'
                   placeholder='name'
                   className={`${styles.input}`}
-                  value={name ? name : ''}
                 />
                 {errors.name ? (
                   <span className={`text-red-500 block mt-1`}>
@@ -113,7 +140,6 @@ function NftForm({
                 type='text'
                 placeholder='description'
                 className={`${styles.input}`}
-                value={description ? description : ''}
               />
               {errors.description ? (
                 <span className={`text-red-500 block mt-1`}>
@@ -135,7 +161,6 @@ function NftForm({
                   type='text'
                   placeholder='price'
                   className={`${styles.input}`}
-                  value={price ? price : ''}
                 />
                 {errors.price ? (
                   <span className={`text-red-500 block mt-1`}>
@@ -182,7 +207,6 @@ function NftForm({
                 type='text'
                 placeholder='url'
                 className={`${styles.input}`}
-                value={imgUrl ? imgUrl : ''}
               />
               {errors.imgUrl ? (
                 <span className={`text-red-500 block mt-1`}>
@@ -194,7 +218,7 @@ function NftForm({
             <div className='w-full mt-3'>
               <input
                 type='submit'
-                value='Sign Up'
+                value='Submit'
                 disabled={isSubmitting || loading}
                 className={`${styles.button} mt-3`}
               />

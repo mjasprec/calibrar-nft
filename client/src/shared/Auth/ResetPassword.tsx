@@ -47,7 +47,6 @@ function ResetPassword({ activationToken }: ResetPasswordPropType) {
 
   const onSubmit = async (formData: ResetPasswordSchema) => {
     try {
-      console.log('FORM DATA', formData);
       const response = await ResetPassword({
         variables: {
           password: formData.password,
@@ -55,7 +54,6 @@ function ResetPassword({ activationToken }: ResetPasswordPropType) {
         },
       });
 
-      console.log('response', response);
       toast.success('Successfully reset password');
     } catch (error: any) {
       toast.error(error.message);
@@ -142,7 +140,7 @@ function ResetPassword({ activationToken }: ResetPasswordPropType) {
             <input
               type='submit'
               value='Sign In'
-              disabled={isSubmitting}
+              disabled={isSubmitting || loading}
               className={`${styles.button} mt-3`}
             />
           </div>
